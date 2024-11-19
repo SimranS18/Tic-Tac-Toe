@@ -1,0 +1,63 @@
+def print_board(board):
+    # Print the current state of the board
+    print("---------")
+    for row in board:
+        print("| " + " | ".join(row) + " |")
+    print("---------")
+
+def check_winner(board, player):
+    # Check rows, columns, and diagonals for a winning condition
+    for row in board:
+        if all(spot == player for spot in row):
+            return True
+
+    for col in range(3):
+        if all(row[col] == player for row in board):
+            return True
+
+    if all(board[i][i] == player for i in range(3)) or all(board[i][2 - i] == player for i in range(3)):
+        return True
+
+    return False
+
+def check_draw(board):
+    # Check if the board is full, indicating a draw
+    return all(spot != " " for row in board for spot in row)
+
+def tic_tac_toe():
+    # Initialize the board
+    board = [[" " for _ in range(3)] for _ in range(3)]
+    current_player = "X"
+    game_over = False
+
+    print("Welcome to Tic-Tac-Toe!")
+    print_board(board)
+
+    while not game_over:
+        # Get the player's move
+        print(f"Player {current_player}, it's your turn.")
+        row = int(input("Enter the row (0, 1, 2): "))
+        col = int(input("Enter the column (0, 1, 2): "))
+
+        # Check if the move is valid
+        if 0 <= row < 3 and 0 <= col < 3 and board[row][col] == " ":
+            board[row][col] = current_player
+            print_board(board)
+
+            # Check for a win or a draw
+            if check_winner(board, current_player):
+                print(f"Player {current_player} wins!")
+                game_over = True
+            elif check_draw(board):
+                print("It's a draw!")
+                game_over = True
+            else:
+                # Switch players
+                current_player = "O" if current_player == "X" else "X"
+        else:
+            print("Invalid move. Try again.")
+
+    print("Game over!")
+
+# Run the game
+tic_tac_toe()
